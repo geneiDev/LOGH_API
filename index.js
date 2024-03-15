@@ -1,21 +1,37 @@
-// index.js
+// index.js 파일
+
 const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const sqlite3 = require('sqlite3').verbose();
+
 const app = express();
 const port = process.env.PORT || 8081;
 
-app.get('/', (req, res) => {
-  res.send('Hello, Express!');
+app.use(cors());
+app.use(bodyParser.json());
+
+const userRoutes = require('./user/UserController');
+app.use('/user', userRoutes);
+
+const db = new sqlite3.Database('db/logh.db', (err) => {
+  if (err) {
+    console.error('Error opening database:', err.message);
+  } else {
+    console.log('Connected to the SQLite database.');
+  }
 });
 
-app.get('/api/users', (req, res) => {
-  const users = [
-    { id: 1, name: 'John' },
-    { id: 2, name: 'Jane' },
-    { id: 3, name: 'Doe' }
-  ];
-  res.json(users);
+// 서버 종료 시 데이터베이스 연결 종료
+process.on('SIGINT', () => {
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Closed the SQLite database connection.');
+    process.exit(0);
+  });
 });
-
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
