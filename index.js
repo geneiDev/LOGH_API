@@ -1,5 +1,4 @@
-// index.js 파일
-
+// index.js
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
