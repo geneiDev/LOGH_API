@@ -21,4 +21,5 @@ jobs:
 
     - name: Build and run server
       run: |
-        node index.js
+        nohup node index.js &
+
