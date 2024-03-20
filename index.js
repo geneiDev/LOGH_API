@@ -10,7 +10,7 @@ const port = process.env.PORT || 8081;
 app.use(cors());
 app.use(bodyParser.json());
 
-const userRoutes = require('./user/UserController');
+const userRoutes = require('./user/userController');
 app.use('/user', userRoutes);
 
 const db = new sqlite3.Database('db/logh.db', (err) => {
