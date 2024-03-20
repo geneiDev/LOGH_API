@@ -1,7 +1,7 @@
 //user/userController.js
 const express = require('express');
 const router = express.Router();
-const UserModel = require('./UserModel');
+const UserModel = require('./userModel');
 
 const dbFilePath = './db/logh.db'; // 데이터베이스 파일 경로
 
