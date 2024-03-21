@@ -49,7 +49,7 @@ class UserModel {
         callback(err, null);
       } else {
         if (!row) {
-          const userId = uuid;
+          const userId = uuid.substring(0, 8);
           const userPwd = uuid;
           this.createUser(userId, userPwd, uuid, (err) => {
             if (err) {
