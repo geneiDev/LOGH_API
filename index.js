@@ -32,6 +32,11 @@ process.on('SIGINT', () => {
   });
 });
 
+app.post('/', (req, res) => {
+  console.info('1231231312313123123123')
+  res.status(200).json({ result : '200' });
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
