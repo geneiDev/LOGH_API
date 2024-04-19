@@ -1,44 +1,23 @@
 //userModel.js
 const sqlite3 = require('sqlite3').verbose();
+const createUserTables = require('./createUserTables');
 
 class UserModel {
   constructor(dbFilePath) {
     this.db = new sqlite3.Database(dbFilePath);
     this.init();
   }
+  // init 함수에서 createUserTables를 사용합니다.
   init(callback) {
-    console.info('createUserTableQuery()');
-    const createUserTableQuery = `
-      CREATE TABLE IF NOT EXISTS TBL_USER_MAIN (
-        ID INTEGER PRIMARY KEY AUTOINCREMENT,
-        USER_ID TEXT NOT NULL,
-        USER_PWD TEXT,
-        USER_NAME TEXT DEFAULT '',
-        USER_PIC TEXT DEFAULT '/images/person/CH_000000.png',
-        UUID INTEGER NOT NULL,
-        TMP_USER TEXT DEFAULT 'Y',
-        REG_DT DATE DEFAULT CURRENT_TIMESTAMP,
-        LANG_TYPE TEXT DEFAULT 'KR',
-        LAST_LOGIN TEXT DEFAULT 'W',
-        POINT INTEGER DEFAULT 0,
-        CONSTRAINT uuid_unique UNIQUE (UUID)
-      )
-    `;
-    this.db.run(createUserTableQuery, function(err) {
-      if (err) {
-        console.error('Error creating user table:', err.message);
-        if (callback) {
-          callback(err);
-        }
-      } else {
-        console.log('User table created successfully.');
-        if (callback) {
-          callback(null);
-        }
-      }
-    });
+    createUserTables(this.db, callback);
   }
 
+
+
+  loginUser(userId, userPwd, callback) {
+    const selectQuery = `SELECT * FROM TBL_USER_MAIN WHERE USER_ID = ? AND USER_PWD = ?`;
+    this.db.get(selectQuery, [userId, userPwd], callback);
+  }
 
   isRegisted(uuid, callback) {
     console.info('isRegisted : ', uuid)
@@ -89,11 +68,6 @@ class UserModel {
   }
   
   
-  loginUser(userId, userPwd, callback) {
-    const selectQuery = `SELECT * FROM TBL_USER_MAIN WHERE USER_ID = ? AND USER_PWD = ?`;
-    this.db.get(selectQuery, [userId, userPwd], callback);
-    console.info('login user result :', callback)
-  }
 
   // 다른 CRUD 메서드들도 추가할 수 있습니다.
 }

@@ -10,8 +10,11 @@ const port = process.env.PORT || 8081;
 app.use(cors());
 app.use(bodyParser.json());
 
-const userRoutes = require('./user/userController');
+const userRoutes = require('./db/user/userController');
 app.use('/user', userRoutes);
+
+const eventRoutes = require('./db/event/eventController');
+app.use('/event', eventRoutes);
 
 const db = new sqlite3.Database('db/logh.db', (err) => {
   if (err) {
@@ -33,7 +36,6 @@ process.on('SIGINT', () => {
 });
 
 app.post('/', (req, res) => {
-  console.info('1231231312313123123123')
   res.status(200).json({ result : '200' });
 });
 
